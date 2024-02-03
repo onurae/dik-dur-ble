@@ -28,7 +28,7 @@ float dt = 0;
 const uint16_t freqSensor = 50;
 unsigned long prevTime;
 unsigned long wakeTime;
-const uint16_t freqBLE = 2;
+const uint16_t freqBLE = 4;
 unsigned long lastTimeBLE;
 float sumBatVoltage = 0;
 int16_t batCounter = 0;
