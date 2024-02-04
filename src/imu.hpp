@@ -25,8 +25,8 @@ private:
     float gRaw[3];
     float aCal[3];
     float gCal[3];
-    float aBias[3] = {0.061981f, -0.017035f, -0.116900f};
-    float gBias[3] = {-0.169571f, 0.339561f, -1.594718f};
+    float aBias[3] = {0.056015f, 0.000459f, -0.015436f};
+    float gBias[3] = {-1.407173f, 2.051758f, -1.705595f};
     bool ReadSensorData();
     float gRes;
     float aRes;
