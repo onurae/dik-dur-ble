@@ -11,6 +11,7 @@
 #include <BLEDevice.h>
 #include <BLEServer.h>
 #include <BLEUtils.h>
+#include <BLE2902.h>
 #include "imu.hpp"
 
 #define SERVICE_UUID "e653fc6d-d701-4a73-ab2c-794482caaba6"
@@ -28,7 +29,7 @@ float dt = 0;
 const uint16_t freqSensor = 50;
 unsigned long prevTime;
 unsigned long wakeTime;
-const uint16_t freqBLE = 4;
+const uint16_t freqBLE = 1;
 unsigned long lastTimeBLE;
 float sumBatVoltage = 0;
 int16_t batCounter = 0;
@@ -63,6 +64,8 @@ void setup()
     pService = pServer->createService(SERVICE_UUID);
     pCharacteristicAngle = pService->createCharacteristic(CHARACTERISTIC_UUID_ANGLE, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY | BLECharacteristic::PROPERTY_INDICATE);
     pCharacteristicBattery = pService->createCharacteristic(CHARACTERISTIC_UUID_BATTERY, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY | BLECharacteristic::PROPERTY_INDICATE);
+    pCharacteristicAngle->addDescriptor(new BLE2902());
+    pCharacteristicBattery->addDescriptor(new BLE2902());
     pService->start();
     pAdvertising = BLEDevice::getAdvertising();
     pAdvertising->addServiceUUID(SERVICE_UUID);
