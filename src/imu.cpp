@@ -54,7 +54,7 @@ bool IMU::Init()
     return true;
 }
 
-void IMU::Update(float dt)
+void IMU::Update(float dt, Fusion fusion)
 {
     if (ReadSensorData() == true)
     {
@@ -65,8 +65,16 @@ void IMU::Update(float dt)
         gCal[1] = gRaw[1] - gBias[1];
         gCal[2] = gRaw[2] - gBias[2];
     }
-    Madgwick6(-gCal[0], gCal[1], -gCal[2], aCal[0], -aCal[1], aCal[2], dt);
-    CalcEulerAngles();
+
+    if (fusion == Fusion::COMPLEMENTARY)
+    {
+        ComplementaryFilter(-gCal[0], gCal[1], -gCal[2], aCal[0], -aCal[1], aCal[2], dt);
+    }
+    else if (fusion == Fusion::MADGWICK)
+    {
+        Madgwick6(-gCal[0], gCal[1], -gCal[2], aCal[0], -aCal[1], aCal[2], dt);
+        CalcEulerAngles();
+    }
 }
 
 bool IMU::ReadSensorData()
@@ -94,6 +102,15 @@ bool IMU::ReadSensorData()
         return true;
     }
     return false;
+}
+
+void IMU::ComplementaryFilter(float gx, float gy, float gz, float ax, float ay, float az, float dt)
+{
+    float accelPitch = atan2(-ax, az);
+    float accelRoll = atan2(ay, az);
+    theta = tau * (theta + DegToRad(gy) * dt) + (1 - tau) * accelPitch;
+    phi = tau * (phi + DegToRad(gx) * dt) + (1 - tau) * accelRoll;
+    psi = psi + DegToRad(gz) * dt;
 }
 
 float IMU::InvSqrt(float x)

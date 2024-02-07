@@ -82,7 +82,7 @@ void loop()
     while (millis() - prevTime < 1000 / freqSensor) {}
     wakeTime = millis();
     dt = (wakeTime - prevTime) * 0.001f;
-    imu.Update(dt);
+    imu.Update(dt, IMU::Fusion::COMPLEMENTARY);
     // imu.PrintRawData();
     // imu.PrintCalibData();
     // imu.PrintEulerAngles();
@@ -99,7 +99,7 @@ void loop()
         }
         lastTimeBLE = millis();
     }
-    sumBatVoltage += 3.3f * analogRead(34) / 4096.0f;
+    sumBatVoltage += analogReadMilliVolts(34) * 0.001f;
     batCounter++;
     if (batCounter >= freqSensor) // per second.
     {

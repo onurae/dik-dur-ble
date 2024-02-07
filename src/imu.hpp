@@ -30,7 +30,9 @@ private:
     bool ReadSensorData();
     float gRes;
     float aRes;
-    float beta = 0.041;
+    const float tau = 0.98;
+    void ComplementaryFilter(float gx, float gy, float gz, float ax, float ay, float az, float dt);
+    const float beta = 0.041;
     float q0 = 1.0;
     float q1 = 0.0;
     float q2 = 0.0;
@@ -38,15 +40,20 @@ private:
     float InvSqrt(float x);
     void Madgwick6(float gx, float gy, float gz, float ax, float ay, float az, float dt);
     void CalcEulerAngles();
-    float phi;   // Roll [rad]
-    float theta; // Pitch [rad]
-    float psi;   // Yaw [rad]
+    float phi = 0;   // Roll [rad]
+    float theta = 0; // Pitch [rad]
+    float psi = 0;   // Yaw [rad]
 
 public:
     IMU(TwoWire &w) { wire = &w; }
     virtual ~IMU() = default;
     bool Init();
-    void Update(float dt);
+    enum class Fusion
+    {
+        COMPLEMENTARY,
+        MADGWICK
+    };
+    void Update(float dt, Fusion fusion = Fusion::COMPLEMENTARY);
     void PrintRawData();
     void Calibration();
     void PrintCalibData();
