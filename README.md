@@ -11,6 +11,6 @@ Use with [my-back-gui](https://github.com/bariseksi/my-back-gui) desktop applica
 
 <p align="left">
   <img src="images/3.png" width="400"><br>
-  <img src="images/1.JPG" width="400">
-  <img src="images/2.JPG" width="442">
+  <img src="images/1.JPG" width="300">
+  <img src="images/2.JPG" width="332">
 </p>
